@@ -1,0 +1,8 @@
+﻿Material,Maximum Temperature,m₂,m₃,m₄,m₅,ϵₚ
+Ferritic steel,900°F (480°C),0.6 * (1.0 - R),2 * ln(1 + El / 100),ln(100 / (100 - RA)),2.2,2.00E-05
+Austenitic stainless steel and nickel-based alloys,900°F (480°C),0.75 * (1.0 - R),3 * ln(1 + El / 100),ln(100 / (100 - RA)),0.6,2.00E-05
+Duplex stainless steel,900°F (480°C),0.7 * (0.95 - R),2 * ln(1 + El / 100),ln(100 / (100 - RA)),2.2,2.00E-05
+"Precipitation hardening, nickel based",1000°F (540°C),1.09 * (0.93 - R),1 * ln(1 + El / 100),ln(100 / (100 - RA)),2.2,2.00E-05
+Aluminum,250°F (120°C),0.52 * (0.98 - R),1.3 * ln(1 + El / 100),ln(100 / (100 - RA)),2.2,5.00E-06
+Copper,150°F (65°C),0.5 * (1.0 - R),2 * ln(1 + El / 100),ln(100 / (100 - RA)),2.2,5.00E-06
+Titanium and zirconium,500°F (260°C),0.5 * (0.98 - R),1.3 * ln(1 + El / 100),ln(100 / (100 - RA)),2.2,2.00E-05
