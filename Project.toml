@@ -23,3 +23,6 @@ LaTeXStrings = "1.4"
 Latexify = "0.16"
 Markdown = "1.11.0"
 PrettyTables = "2.4"
+
+[workspace]
+projects = ["test"]
