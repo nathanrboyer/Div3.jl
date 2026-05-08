@@ -1,0 +1,7 @@
+name = "Div3"
+uuid = "ab82a220-3fe6-4d48-8470-cb6afb7bc69a"
+authors = ["Nathan Boyer <nathanrobertboyer@gmail.com>"]
+version = "0.0.1"
+
+[compat]
+julia = "1.12"
