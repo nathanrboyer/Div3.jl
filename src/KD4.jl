@@ -37,4 +37,4 @@ dxdn(C, frk, ΔK, m) = C * frk * ΔK ^ m
 """KD-430(b) ΔKth to check for zero growth condition"""
 ΔKth(G, H, Rk, I) = max(2, min(G * (1 - H * Rk), I))
 
-end #end module BPV
+end #end module KD4
