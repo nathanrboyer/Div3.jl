@@ -1,4 +1,4 @@
-module BPV #from ASME pressure vessel code 2025 editiion
+module KD4 #from ASME pressure vessel code 2025 editiion
 
 """thickness target from KD-412(b)"""
 thickness_target(Ai, Acr, t) = min(0.25 * t , Ai + 0.25 * (Acr - Ai))
