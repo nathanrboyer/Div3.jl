@@ -11,15 +11,11 @@ or by opening their exported `*_notebook.html` file in your web browser.
 module Div3
 
 module KM620
-
 include("KM620_notebook.jl")
-
 end #module
 
 module KD232
-
 include("KD232_notebook.jl")
-
 end #module
 
 include("KD4.jl")
