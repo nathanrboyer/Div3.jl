@@ -47,12 +47,12 @@ The theoretical collapse pressure of the combined remaining layers shall be calc
 the inside diameter of the innermost of the remaining layers as the pressure loading diameter."""
 function liner_lbb(user_inputs)
     (; Pd, ODref, OD, σy, σuts, open_end) = user_inputs
-    Y = Y(OD, ODref) #outer shell
-    Kut = Kut.(σy, σuts)
+    Y_shell = Y(OD, ODref) 
+    Kut_shell = Kut.(σy, σuts)
     if open_end
-        Pdmax = Pdmax_open(Kut, σy, σuts, Y)
+        Pdmax = Pdmax_open(Kut_shell, σy, σuts, Y_shell)
     else
-        Pdmax = Pdmax_closed(Kut, σy, σuts, Y)
+        Pdmax = Pdmax_closed(Kut_shell, σy, σuts, Y_shell)
     end
     return 1.732 * Pdmax > 1.2 * Pd #Boolean
 end
