@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.20.24
+# v1.0.3
 
 using Markdown
 using InteractiveUtils
@@ -17,13 +17,17 @@ end
   ╠═╡ =#
 
 # ╔═╡ a268a8f0-a394-11ef-247d-2994c2d46cce
-using Latexify, LaTeXStrings
+begin
+	using Latexify, LaTeXStrings, PlutoUI
+	Text("Packages are loaded.")
+end
 
 # ╔═╡ 71449ab9-4daf-40b1-8972-15aa685adf43
 md"""
 ### Verification
-These equations last checked to ASME BPVC **2023 Edition**.  \
-*Nathan Boyer -- 11/18/2024*
+These equations last verified to ASME BPVC **2025 Edition**.
+- *Verified compatible with 2023 Edition: Nathan Boyer -- 11/18/2024*
+- *Verified compatible with 2025 Edition: Nathan Boyer -- 07/07/2026*
 """
 
 # ╔═╡ 6c1243b4-3693-4e12-a0ee-00d7087776f9
@@ -156,7 +160,7 @@ remove_arguments(
 	        + 1.5 * (Δϵ_p12k^2 + Δϵ_p23k^2 + Δϵ_p31k^2)
 	    )^0.5
 	)
-)
+) |> WideCell
 
 # ╔═╡ 72142f97-bf9f-4d15-9be3-3a731ca9f41d
 remove_arguments(
@@ -191,18 +195,6 @@ remove_arguments(
 	@latexrun R(S_y, S_u) = S_y / S_u
 )
 
-# ╔═╡ 191dbcb3-4315-4588-90dd-1acf9637431e
-# Reference: https://discourse.julialang.org/t/pluto-pdf-and-printing/65055/5?u=nathan_boyer
-html"""
-<style>
-body:not(.fake_class) main {
-	max-width: 50%;
-	margin-right: 0px;
-	align-self: center;
-}
-</style>
-"""
-
 # ╔═╡ Cell order:
 # ╟─71449ab9-4daf-40b1-8972-15aa685adf43
 # ╟─6c1243b4-3693-4e12-a0ee-00d7087776f9
@@ -225,6 +217,5 @@ body:not(.fake_class) main {
 # ╟─97481830-55a3-4368-93a3-434a0cdf911a
 # ╟─a6e742f1-6869-4770-a299-8a2d16f404f4
 # ╟─2e6b3627-77ab-4758-bf45-324d9adb8868
-# ╟─776d7b87-68c3-4e27-8d42-8b5278119e3d
 # ╟─a268a8f0-a394-11ef-247d-2994c2d46cce
-# ╟─191dbcb3-4315-4588-90dd-1acf9637431e
+# ╟─776d7b87-68c3-4e27-8d42-8b5278119e3d

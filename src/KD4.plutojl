@@ -1,0 +1,107 @@
+### A Pluto.jl notebook ###
+# v1.0.3
+
+using Markdown
+using InteractiveUtils
+
+# ╔═╡ 08a12f83-f57e-4be9-bb4c-e47c9ae4bad9
+# ╠═╡ show_logs = false
+# ╠═╡ skip_as_script = true
+#=╠═╡
+begin
+	import Pkg
+	Pkg.activate(Base.current_project(@__DIR__))
+	Pkg.instantiate()
+	Text("Project environment is active.")
+end
+  ╠═╡ =#
+
+# ╔═╡ 578c8d35-4c8e-4a67-ad35-aaca9d5b08fb
+begin
+	using Latexify, LaTeXStrings, PlutoUI
+	Text("Packages are loaded.")
+end
+
+# ╔═╡ 581d1552-7a1c-11f1-8f9d-3761c9055a36
+md"""
+### Verification
+These equations last verified to ASME BPVC **2025 Edition**.
+- *Verified compatible with 2025 Edition: Nathan Boyer -- 07/07/2026*
+"""
+
+# ╔═╡ 9a64bb08-bba6-4d6c-922a-e7f99f0f4214
+md"# KD-412 Equations"
+
+# ╔═╡ b70a2e8f-fb1c-40eb-965c-bd0303629f8d
+md"### Unlabeled Equations"
+
+# ╔═╡ 7e22a415-a0e4-4849-b336-00ae4cde7474
+md"# KD-430 Equations"
+
+# ╔═╡ c7014b32-e4c4-40ff-82a8-1d64869d740a
+"""Table KD-430 Room-Temperature Crack Growth Rate Factors,
+assuming yield greater than 90 ksi"""
+function crack_growth_constants()
+C0 = 1.95e-10 # in/cycle (ksi*in^1/2)^-m
+m = 3.26 
+G = 6.4
+H = 0.85
+I = 5.5
+return (; C0, m, G, H, I)
+end
+
+# ╔═╡ 9ffbad78-3a84-4e83-a41d-5b053841be54
+"""KD-430(d) C must be corrected when not at room temperature"""
+temp_correction(C0, E0, Eop, m) = C0 * (E0 / Eop) ^ m
+
+# ╔═╡ 9d365c0b-0232-4edb-92f8-d2914435c1ef
+"""Table KD-431 Crack Growth Rate Factors, assuming yield greater than 90 ksi"""
+function frk(Rk, m)
+    C2 = 1.5
+    C3 = 3.53
+    if 0 ≤ Rk < 1
+        return 1 + C3 * Rk
+    elseif Rk < 0
+        return (C2 / (C2 - Rk)) ^ m
+    end
+end
+
+# ╔═╡ e7d88ff5-a857-4f69-baa6-c74a1da14b38
+"""KD-430 Crack growth rate, in/cycle, applicable to da/dN & dc/dN, not dl/dN"""
+dxdn(C, frk, ΔK, m) = C * frk * ΔK ^ m
+
+# ╔═╡ b24cea01-f96b-4bbc-99fd-b04d69250d93
+"""KD-430(b) ΔKth to check for zero growth condition"""
+ΔKth(G, H, Rk, I) = max(2, min(G * (1 - H * Rk), I))
+
+# ╔═╡ bac28b27-a151-4afd-be82-51dc78d03abb
+md"# Appendix"
+
+# ╔═╡ 1ae98a49-267c-4235-bfcd-b599f7cba0b1
+"Removes the function argument list from the latex equation,
+so equations are shorter and better match the source text."
+function remove_arguments(s::LaTeXString)
+    r = r"\\left\(.*?\\right\)"
+    return LaTeXString(replace(s, r=>"", count=1))
+end
+
+# ╔═╡ 7f7ec542-5613-44b9-8ca8-b4d28867308b
+remove_arguments(
+	@latexrun thickness_target(Ai, Acr, t) = min(0.25 * t, Ai + 0.25 * (Acr - Ai))
+)
+
+# ╔═╡ Cell order:
+# ╟─581d1552-7a1c-11f1-8f9d-3761c9055a36
+# ╟─9a64bb08-bba6-4d6c-922a-e7f99f0f4214
+# ╟─b70a2e8f-fb1c-40eb-965c-bd0303629f8d
+# ╠═7f7ec542-5613-44b9-8ca8-b4d28867308b
+# ╟─7e22a415-a0e4-4849-b336-00ae4cde7474
+# ╠═c7014b32-e4c4-40ff-82a8-1d64869d740a
+# ╠═9ffbad78-3a84-4e83-a41d-5b053841be54
+# ╠═9d365c0b-0232-4edb-92f8-d2914435c1ef
+# ╠═e7d88ff5-a857-4f69-baa6-c74a1da14b38
+# ╠═b24cea01-f96b-4bbc-99fd-b04d69250d93
+# ╟─bac28b27-a151-4afd-be82-51dc78d03abb
+# ╟─08a12f83-f57e-4be9-bb4c-e47c9ae4bad9
+# ╟─578c8d35-4c8e-4a67-ad35-aaca9d5b08fb
+# ╟─1ae98a49-267c-4235-bfcd-b599f7cba0b1

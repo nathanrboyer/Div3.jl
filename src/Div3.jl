@@ -10,14 +10,16 @@ or by opening their exported `*_notebook.html` file in your web browser.
 """
 module Div3
 
-module KM620
-include("KM620_notebook.jl")
-end #module
+module KM6
+include("KM6.plutojl")
+end  # module KM6
 
-module KD232
-include("KD232_notebook.jl")
-end #module
+module KD2
+include("KD2.plutojl")
+end  # module KD2
 
-include("KD4.jl")
+module KD4
+include("KD4.plutojl")
+end  # module KD4
 
-end
+end  # module Div3

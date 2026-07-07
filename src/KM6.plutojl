@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.20.24
+# v1.0.3
 
 using Markdown
 using InteractiveUtils
@@ -18,15 +18,16 @@ end
 
 # ╔═╡ ef4910c0-a5c8-11ef-0e00-67a503735431
 begin
-	using Latexify, LaTeXStrings, DataFrames, CSV, PrettyTables, HypertextLiteral
+	using Latexify, LaTeXStrings, DataFrames, CSV, PrettyTables, HypertextLiteral, PlutoUI
 	Text("Packages are loaded.")
 end
 
 # ╔═╡ e2e76d7e-4f29-455e-af81-07fe6cf85a5a
 md"""
 ### Verification
-These equations last checked to ASME BPVC **2023 Edition**.  \
-*Nathan Boyer -- 11/18/2024*
+These equations last verified to ASME BPVC **2025 Edition**.
+- *Verified compatible with 2023 Edition: Nathan Boyer -- 11/18/2024*
+- *Verified compatible with 2025 Edition: Nathan Boyer -- 07/07/2026*
 """
 
 # ╔═╡ 4285f1b7-e25a-448c-bae0-c6bc46a17ee4
@@ -138,24 +139,6 @@ md"""
 
 # ╔═╡ 1e41aea5-2635-4a56-89bd-29f0d6e25b78
 md"# Appendix"
-
-# ╔═╡ a383af0b-ffa0-4789-9f2b-62fcd8040c18
-Text("Document is widened.")
-
-# ╔═╡ 412c95b6-6067-46c4-ab61-406e0cce7cba
-# ╠═╡ skip_as_script = true
-#=╠═╡
-# Reference: https://discourse.julialang.org/t/pluto-pdf-and-printing/65055/5
-html"""
-<style>
-body:not(.fake_class) main {
-	max-width: 54%;
-	margin-right: 0px;
-	align-self: center;
-}
-</style>
-"""
-  ╠═╡ =#
 
 # ╔═╡ 93572273-f1c1-4076-8dec-e9275cec3c05
 md"### Function Definitions"
@@ -427,12 +410,14 @@ end
 
 # ╔═╡ e15c132b-6fc9-44a1-9cc6-aa0e5dab86a4
 begin
-	const coefficients_table_for_printing = parse_table_KM620(normpath(@__FILE__, "..", "..", "data", "Table KM-620.csv"))
-	beautify(coefficients_table_for_printing)
+	const coefficients_table_for_printing = parse_table_KM620(
+		normpath(@__FILE__, "..", "..", "data", "Table KM-620.csv")
+	)
+	beautify(coefficients_table_for_printing) |> WideCell
 end
 
 # ╔═╡ bdf3cbcd-aa2f-45de-ab10-746b793052d9
-print_table_notes(coefficients_table_for_printing)
+print_table_notes(coefficients_table_for_printing) |> WideCell
 
 # ╔═╡ 299fcd18-4463-41b9-a316-82668202a3d5
 const coefficients_table = transform(
@@ -482,8 +467,6 @@ const coefficients_table = transform(
 # ╟─1e41aea5-2635-4a56-89bd-29f0d6e25b78
 # ╟─619c6125-0c6b-4e77-a18d-2c968e33037c
 # ╟─ef4910c0-a5c8-11ef-0e00-67a503735431
-# ╟─a383af0b-ffa0-4789-9f2b-62fcd8040c18
-# ╟─412c95b6-6067-46c4-ab61-406e0cce7cba
 # ╟─93572273-f1c1-4076-8dec-e9275cec3c05
 # ╟─f4d3823d-9b6f-4a42-b39a-dc1bb78be91c
 # ╟─dd643d77-994f-4fa0-85b4-6f7d82acc6db
