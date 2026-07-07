@@ -38,6 +38,10 @@ md"### Unlabeled Equations"
 # ╔═╡ 7e22a415-a0e4-4849-b336-00ae4cde7474
 md"# KD-430 Equations"
 
+# ╔═╡ 64969045-5857-4355-9851-fa02343c3a13
+"""KD-430 stress intensity factor ratio"""
+Rk(K1min, K1max, K1res) = (K1min + K1res) / (K1max + K1res)
+
 # ╔═╡ c7014b32-e4c4-40ff-82a8-1d64869d740a
 """Table KD-430 Room-Temperature Crack Growth Rate Factors,
 assuming yield greater than 90 ksi"""
@@ -96,6 +100,7 @@ remove_arguments(
 # ╟─b70a2e8f-fb1c-40eb-965c-bd0303629f8d
 # ╠═7f7ec542-5613-44b9-8ca8-b4d28867308b
 # ╟─7e22a415-a0e4-4849-b336-00ae4cde7474
+# ╠═64969045-5857-4355-9851-fa02343c3a13
 # ╠═c7014b32-e4c4-40ff-82a8-1d64869d740a
 # ╠═9ffbad78-3a84-4e83-a41d-5b053841be54
 # ╠═9d365c0b-0232-4edb-92f8-d2914435c1ef
