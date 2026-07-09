@@ -18,7 +18,7 @@ end
 
 # ╔═╡ 578c8d35-4c8e-4a67-ad35-aaca9d5b08fb
 begin
-	using Latexify, LaTeXStrings, PlutoUI
+	using Latexify, LaTeXStrings, PlutoUI, DataFrames, PrettyTables
 	Text("Packages are loaded.")
 end
 
@@ -30,17 +30,23 @@ These equations last verified to ASME BPVC **2025 Edition**.
 """
 
 # ╔═╡ 9a64bb08-bba6-4d6c-922a-e7f99f0f4214
-md"# KD-412 Equations"
+md"# KD-412 Equations
+The calculated number of design cycles is the lesser of
+
+(a) the number of cycles corresponding to one-half of
+the number of cycles required to propagate a crack from
+the initial assumed crack size to the critical crack size [see
+KD-401(c)]
+
+(b) the number of cycles required to propagate a crack
+from the initial assumed crack size to the depth as defined
+in KD-412.1 and KD-412.2"
 
 # ╔═╡ b70a2e8f-fb1c-40eb-965c-bd0303629f8d
-md"### Unlabeled Equations"
+md"### KD-412"
 
 # ╔═╡ 7e22a415-a0e4-4849-b336-00ae4cde7474
 md"# KD-430 Equations"
-
-# ╔═╡ 64969045-5857-4355-9851-fa02343c3a13
-"""KD-430 stress intensity factor ratio"""
-Rk(K1min, K1max, K1res) = (K1min + K1res) / (K1max + K1res)
 
 # ╔═╡ c7014b32-e4c4-40ff-82a8-1d64869d740a
 """Table KD-430 Room-Temperature Crack Growth Rate Factors,
@@ -58,25 +64,104 @@ end
 """KD-430(d) C must be corrected when not at room temperature"""
 temp_correction(C0, E0, Eop, m) = C0 * (E0 / Eop) ^ m
 
-# ╔═╡ 9d365c0b-0232-4edb-92f8-d2914435c1ef
-"""Table KD-431 Crack Growth Rate Factors, assuming yield greater than 90 ksi"""
-function frk(Rk, m)
-    C2 = 1.5
-    C3 = 3.53
-    if 0 ≤ Rk < 1
-        return 1 + C3 * Rk
-    elseif Rk < 0
-        return (C2 / (C2 - Rk)) ^ m
+# ╔═╡ b604f26a-04b1-4dbc-a829-cf96ae8b6d25
+md"### Table KD-431
+Crack Growth Rate Factors"
+
+# ╔═╡ da11cfdd-20c0-416f-bc59-9f4c3f82de2f
+begin
+	carbonsteel = "Carbon and low alloy steels"
+	highstrsteel = "High strength low alloy steels"
+	martincitic = "Martensitic precipitation-hardened steels"
+	austincitic = "Austenitic stainless steels"
+	const C2dict = Dict(
+		carbonsteel => nothing ,
+		highstrsteel => 1.5,
+		martincitic => 1.5,
+		austincitic => nothing
+	)
+	const C3dict = Dict(
+		carbonsteel => nothing ,
+		highstrsteel => 3.53,
+		martincitic => 3.48,
+		austincitic => nothing
+	   )
+	tablecat = [highstrsteel, martincitic]
+	df = DataFrame(
+		Category = tablecat,
+	    C2 = [C2dict[option] for option in tablecat],
+	    C3 = [C3dict[option] for option in tablecat],
+	)
+	pretty_table(HTML, df, show_subheader = false)
+end
+
+# ╔═╡ fc2c02e4-7310-48db-8e8d-a4fc0145eabd
+@latexrun function fR_K(cat, R_K, m)
+    C2 = C2dict[cat]
+    C3 = C3dict[cat]
+    if cat == carbonsteel
+        if 0 ≤ R_K < 1
+            return (2.88 / (2.88 - R_K)) ^ m
+        elseif R_K < 0
+            return (1.0 / (1.0 - R_K)) ^ m
+        end
+    elseif cat == highstrsteel
+        if 0 ≤ R_K < 1
+            return 1 + C3 * R_K
+        elseif R_K < 0
+            return (C2 / (C2 - R_K)) ^ m
+        end
+    elseif cat == martincitic
+        if R_K ≥ 0.67
+            return 30.53 * R_K - 17.0
+        elseif 0 ≤ R_K < 0.67
+            return 1.0 + C3 * R_K
+        elseif R_K < 0 
+            return (C2 / (C2 - R_K)) ^ m
+        end
+    elseif cat == austincitic
+        if 0.79 < R_K < 1.0
+            return -43.35 + 57.97 * R_K
+        elseif 0 < R_K ≤ 0.79
+            return 1.0 + 1.8 * R_K
+        elseif R_K ≤ 0 
+            return 1.0
+        end
     end
 end
 
+# ╔═╡ bfd12b61-be8d-4479-ba9b-55bb40d0fa88
+md"# KD430"
+
+# ╔═╡ 605d0dd0-373b-43c3-8d4d-36d118e52279
+md"### KD430(a)"
+
 # ╔═╡ e7d88ff5-a857-4f69-baa6-c74a1da14b38
-"""KD-430 Crack growth rate, in/cycle, applicable to da/dN & dc/dN, not dl/dN"""
-dxdn(C, frk, ΔK, m) = C * frk * ΔK ^ m
+LaTeXString(replace((@latexrun da_dN(C, fR_K, ΔK, m) = C * fR_K * ΔK ^ m), "\\mathrm{da}_{dN}"=>"\\frac{da}{dN}"))
+
+# ╔═╡ 26c52c7f-2223-4636-9f79-f9241564ddc3
+@latexrun dc_dN(C, fR_K, ΔK, m) = C * fR_K * ΔK ^ m
+
+# ╔═╡ 054580e0-7f18-4748-a90e-ce43db4eb05e
+@latexrun dl_dN(C, fR_K, ΔK, m) = dc_dN(C, fR_K, ΔK, m) * 2
+
+# ╔═╡ 64969045-5857-4355-9851-fa02343c3a13
+@latexrun R_K(K_Imin, K_1max, K_Ires) = (K_Imin + K_Ires) / (K_Imax + K_Ires)
+
+# ╔═╡ 323f7123-2138-48c2-a7e5-ab01c6aa5e13
+md"### KD430(b)(2)
+ΔK check if crack growth is zero. Other crack growth checks are in crack_growth() in AIPPostProcessing."
 
 # ╔═╡ b24cea01-f96b-4bbc-99fd-b04d69250d93
-"""KD-430(b) ΔKth to check for zero growth condition"""
-ΔKth(G, H, Rk, I) = max(2, min(G * (1 - H * Rk), I))
+@latexrun function ΔK_th(cat, G, H, R_K, I)
+	if cat == "Carbon Steels" || cat == "Stainless Steels"
+		return max(1.8, min(G * (1 - H * R_K), I))
+	elseif cat == "Q&T Steels"
+		return max(2, min(G * (1 - H * R_K), I))
+	elseif cat == "Aluminum"
+		return max(0.64, min(G * (1 - H * R_K), I))
+	end
+end
 
 # ╔═╡ bac28b27-a151-4afd-be82-51dc78d03abb
 md"# Appendix"
@@ -91,22 +176,29 @@ end
 
 # ╔═╡ 7f7ec542-5613-44b9-8ca8-b4d28867308b
 remove_arguments(
-	@latexrun thickness_target(Ai, Acr, t) = min(0.25 * t, Ai + 0.25 * (Acr - Ai))
+	@latexrun a_final(a_init, a_crit, t) = min(0.25 * t, a_init + 0.25 * (a_crit - a_init))
 )
 
 # ╔═╡ Cell order:
 # ╟─581d1552-7a1c-11f1-8f9d-3761c9055a36
 # ╟─9a64bb08-bba6-4d6c-922a-e7f99f0f4214
 # ╟─b70a2e8f-fb1c-40eb-965c-bd0303629f8d
-# ╠═7f7ec542-5613-44b9-8ca8-b4d28867308b
+# ╟─7f7ec542-5613-44b9-8ca8-b4d28867308b
 # ╟─7e22a415-a0e4-4849-b336-00ae4cde7474
-# ╠═64969045-5857-4355-9851-fa02343c3a13
 # ╠═c7014b32-e4c4-40ff-82a8-1d64869d740a
 # ╠═9ffbad78-3a84-4e83-a41d-5b053841be54
-# ╠═9d365c0b-0232-4edb-92f8-d2914435c1ef
-# ╠═e7d88ff5-a857-4f69-baa6-c74a1da14b38
+# ╟─b604f26a-04b1-4dbc-a829-cf96ae8b6d25
+# ╠═fc2c02e4-7310-48db-8e8d-a4fc0145eabd
+# ╠═da11cfdd-20c0-416f-bc59-9f4c3f82de2f
+# ╟─bfd12b61-be8d-4479-ba9b-55bb40d0fa88
+# ╟─605d0dd0-373b-43c3-8d4d-36d118e52279
+# ╟─e7d88ff5-a857-4f69-baa6-c74a1da14b38
+# ╟─26c52c7f-2223-4636-9f79-f9241564ddc3
+# ╟─054580e0-7f18-4748-a90e-ce43db4eb05e
+# ╟─64969045-5857-4355-9851-fa02343c3a13
+# ╟─323f7123-2138-48c2-a7e5-ab01c6aa5e13
 # ╠═b24cea01-f96b-4bbc-99fd-b04d69250d93
 # ╟─bac28b27-a151-4afd-be82-51dc78d03abb
-# ╟─08a12f83-f57e-4be9-bb4c-e47c9ae4bad9
-# ╟─578c8d35-4c8e-4a67-ad35-aaca9d5b08fb
+# ╠═08a12f83-f57e-4be9-bb4c-e47c9ae4bad9
+# ╠═578c8d35-4c8e-4a67-ad35-aaca9d5b08fb
 # ╟─1ae98a49-267c-4235-bfcd-b599f7cba0b1

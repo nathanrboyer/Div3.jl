@@ -21,7 +21,5 @@ end  # module KD2
 module KD4
 include("KD4.plutojl")
 end  # module KD4
-include("KD4.jl")
-include("KD2.jl")
 
 end  # module Div3
