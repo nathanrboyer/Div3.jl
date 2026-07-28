@@ -22,4 +22,8 @@ module KD4
 include("KD4.plutojl")
 end  # module KD4
 
+module KT3
+include("KT3.plutojl")
+end  # module KT3
+
 end  # module Div3

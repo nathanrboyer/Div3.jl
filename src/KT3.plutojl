@@ -1,0 +1,110 @@
+### A Pluto.jl notebook ###
+# v1.0.3
+
+using Markdown
+using InteractiveUtils
+
+# ╔═╡ 2e6b3627-77ab-4758-bf45-324d9adb8868
+# ╠═╡ show_logs = false
+# ╠═╡ skip_as_script = true
+#=╠═╡
+begin
+	import Pkg
+	Pkg.activate(Base.current_project(@__DIR__))
+	Pkg.instantiate()
+	Text("Project environment is active.")
+end
+  ╠═╡ =#
+
+# ╔═╡ a268a8f0-a394-11ef-247d-2994c2d46cce
+begin
+	using Latexify, LaTeXStrings, PlutoUI
+	Text("Packages are loaded.")
+end
+
+# ╔═╡ 71449ab9-4daf-40b1-8972-15aa685adf43
+md"""
+### Verification
+These equations last verified to ASME BPVC **2025 Edition**.
+- *Verified compatible with 2025 Edition: Maxwell Frame -- 07/28/2026*
+"""
+
+# ╔═╡ 7303e359-c56d-4bd2-ae90-47419ae762b2
+md"# KT-312 Equations
+Upper limit for test pressure"
+
+# ╔═╡ cce7a2a1-a86d-4739-9297-eed041f2c9f1
+md"### KT-312.1"
+
+# ╔═╡ fe44f911-3cbc-413d-bcf5-888ac5c23d7f
+md"### KT-312.2
+Open-end cylindrical shell for Y ≤ 2.85"
+
+# ╔═╡ 24b3978d-ede1-45f0-a32a-f744252c5b48
+md"Closed-end cylindrical shell and open-end cylindrical shell for Y > 2.85:"
+
+# ╔═╡ fea2ea61-0f7c-476c-87eb-a61c5191a659
+md"Equations for multilayer vessels are valid for single wall vessels with j = 1"
+
+# ╔═╡ 30725c9f-6589-4273-bedd-014aec535333
+md"# KT-312 Nomenclature"
+
+# ╔═╡ ee6101e9-8ace-434f-8d13-8322c96c8bc6
+md"""
+``Y`` = diameter ratio
+
+``K_{ut}`` = hydrostatic test pressure upper limit factor (see KT-312)
+
+``S_u`` = tensile strength at design temperature from Section II, Part D, Subpart 1, Table U. If the tensile strength is not listed in Section II, Part D, Subpart 1, Table U, yield strength instead of tensile strength may be used.
+
+``S_y`` = yield strength at design temperature from Section II, Part D, Subpart 1, Table Y-1
+"""
+
+# ╔═╡ a6e742f1-6869-4770-a299-8a2d16f404f4
+md"# Appendix"
+
+# ╔═╡ 776d7b87-68c3-4e27-8d42-8b5278119e3d
+"Removes the function argument list from the latex equation,
+so equations are shorter and better match the source text."
+function remove_arguments(s::LaTeXString)
+    r = r"\\left\(.*?\\right\)"
+    return LaTeXString(replace(s, r=>"", count=1))
+end
+
+# ╔═╡ fd48a785-d5d4-4c8d-b170-d904df3513c6
+remove_arguments(@latexrun function K_ut(σ_y, σ_uts)
+    if σ_y / σ_uts ≤ 0.7
+        return 0.95
+    elseif 0.7 < σ_y / σ_uts ≤ 0.9
+        return 1.244 - 0.42 * (σ_y / σ_uts)
+    elseif σ_y / σ_uts > 0.9
+        return 0.866
+    end
+end)
+
+# ╔═╡ ce4ad990-84d2-4f6c-8dc8-f4d93f9e142e
+remove_arguments(@latexrun P_t_open(K_ut, S_y, Y) =
+    sum(3.732 * K_ut[j] * S_y[j] * (Y[j]^0.268 - 1) for j in eachindex(Y))
+)
+
+# ╔═╡ bc4459c4-d302-44b7-abb2-2bbefc3b2ef4
+remove_arguments(@latexrun P_t_closed(K_ut, S_y, S_uts, Y) =
+sum(1.155 * (S_y[j]) * (Y[j]^0.268 - 1) for j in eachindex(Y))
+)
+
+# ╔═╡ Cell order:
+# ╟─71449ab9-4daf-40b1-8972-15aa685adf43
+# ╟─7303e359-c56d-4bd2-ae90-47419ae762b2
+# ╟─cce7a2a1-a86d-4739-9297-eed041f2c9f1
+# ╟─fd48a785-d5d4-4c8d-b170-d904df3513c6
+# ╟─fe44f911-3cbc-413d-bcf5-888ac5c23d7f
+# ╟─ce4ad990-84d2-4f6c-8dc8-f4d93f9e142e
+# ╟─24b3978d-ede1-45f0-a32a-f744252c5b48
+# ╟─bc4459c4-d302-44b7-abb2-2bbefc3b2ef4
+# ╟─fea2ea61-0f7c-476c-87eb-a61c5191a659
+# ╟─30725c9f-6589-4273-bedd-014aec535333
+# ╟─ee6101e9-8ace-434f-8d13-8322c96c8bc6
+# ╟─a6e742f1-6869-4770-a299-8a2d16f404f4
+# ╟─2e6b3627-77ab-4758-bf45-324d9adb8868
+# ╟─a268a8f0-a394-11ef-247d-2994c2d46cce
+# ╟─776d7b87-68c3-4e27-8d42-8b5278119e3d
