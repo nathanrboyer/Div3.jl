@@ -3,7 +3,8 @@ uuid = "ab82a220-3fe6-4d48-8470-cb6afb7bc69a"
 version = "0.0.1"
 authors = [
     "Nathan Boyer <nathanrobertboyer@gmail.com>",
-    "Maxwell Frame <mframe@aiphip.com>"]
+    "Maxwell Frame <mframe@aiphip.com>",
+]
 
 [workspace]
 projects = ["test"]
@@ -26,7 +27,7 @@ HypertextLiteral = "1.0"
 InteractiveUtils = "1.11"
 LaTeXStrings = "1.4"
 Latexify = "0.16"
-Markdown = "1.11.0"
-PlutoUI = "0.7.63"
-PrettyTables = "2.4.0"
+Markdown = "1.11"
+PlutoUI = "0.7"
+PrettyTables = "2.4"
 julia = "1.12"
