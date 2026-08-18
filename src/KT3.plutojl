@@ -26,7 +26,7 @@ end
 md"""
 ### Verification
 These equations last verified to ASME BPVC **2025 Edition**.
-- *Verified compatible with 2025 Edition: Maxwell Frame -- 07/28/2026*
+- *Verified compatible with 2025 Edition: Maxwell Frame -- 08/18/2026*
 """
 
 # ╔═╡ 7303e359-c56d-4bd2-ae90-47419ae762b2
@@ -88,8 +88,8 @@ remove_arguments(@latexrun P_t_open(K_ut, S_y, Y) =
 )
 
 # ╔═╡ bc4459c4-d302-44b7-abb2-2bbefc3b2ef4
-remove_arguments(@latexrun P_t_closed(K_ut, S_y, S_uts, Y) =
-sum(1.155 * (S_y[j]) * (Y[j]^0.268 - 1) for j in eachindex(Y))
+remove_arguments(@latexrun P_t_closed(K_ut, S_y, Y) =
+sum(1.155 * K_ut[j] * (S_y[j]) * log(Y[j]) for j in eachindex(Y))
 )
 
 # ╔═╡ Cell order:
