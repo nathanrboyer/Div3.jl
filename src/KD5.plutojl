@@ -1,0 +1,235 @@
+### A Pluto.jl notebook ###
+# v1.0.3
+
+using Markdown
+using InteractiveUtils
+
+# ╔═╡ 2e6b3627-77ab-4758-bf45-324d9adb8868
+# ╠═╡ show_logs = false
+# ╠═╡ skip_as_script = true
+#=╠═╡
+begin
+	import Pkg
+	Pkg.activate(Base.current_project(@__DIR__))
+	Pkg.instantiate()
+	Text("Project environment is active.")
+end
+  ╠═╡ =#
+
+# ╔═╡ a268a8f0-a394-11ef-247d-2994c2d46cce
+begin
+	using Latexify, LaTeXStrings, PlutoUI
+	Text("Packages are loaded.")
+end
+
+# ╔═╡ 71449ab9-4daf-40b1-8972-15aa685adf43
+md"""
+### Verification
+These equations last verified to ASME BPVC **2025 Edition**.
+- *Verified compatible with 2025 Edition: Maxwell Frame - 8/24/2026*
+"""
+
+# ╔═╡ 7303e359-c56d-4bd2-ae90-47419ae762b2
+md"# KD-520 Equations
+Calculation of Residual Stresses"
+
+# ╔═╡ 65815c9c-07fc-4292-b049-1ab1296fc064
+md"### Overstrain"
+
+# ╔═╡ 456701b2-0951-4f97-8328-9d30b4b8ebd4
+md"### Wall Ratio"
+
+# ╔═╡ cce7a2a1-a86d-4739-9297-eed041f2c9f1
+md"### KD-521.3
+This shall only be used todetermine ``D_P`` ifthe value ofthe resulting overstrain ratio so determined is less than 0.4"
+
+# ╔═╡ 11d75f19-1ed8-4531-9593-2bab83868526
+md"### KD-522.1
+When no reverse yielding occurs:"
+
+# ╔═╡ 9548a905-9619-42c8-a39f-55d170aaa0a8
+md"### KD-522.2
+Correction for reverse yielding (Bauschinger effect)
+
+(a) Using eqs. KD-522.1(1) and KD-522.1(2), calculate the value of D at which ``(σ_{tRA} − σ_{rRA}) = 0`` using an iterative procedure, and define this as ``D_Z``.
+
+(b) Calculate the value of ``σ_{tRA}`` at D = DI from eq. KD-522.1(1) and define this as ``σ_{AD}``. Calculate the corrected value of the residual stress at D = DI (defined as ``σ_{CD}``), from both eqs. (1) and (2) below."
+
+# ╔═╡ ce07593d-cd48-47f2-bafa-b5ebbad8ddb0
+md"If the end load on the closures is not supported by the cylinder wall during autofrettage (open end)
+
+If the end load on the closures is supported by the cylinder wall during autofrettage (closed end), replace eq. (2) with ``σ_{CD}/σ_{AD} = 1.15``."
+
+# ╔═╡ 6b55244e-48b1-4d93-89ac-f82cc79d7658
+md"The value of σCD to be used is the least negative value of those determined from eq. (1) or (2) above.
+(c) If ``σ_{CD}/S_y < − 0.7``, then let ``σ_{CD}/S_y = − 0.7``."
+
+# ╔═╡ 30046613-10cd-4552-8c14-7e91c9f2e001
+md"(d) For ``D_I < D < D_Z``, calculate the residual stress distribution from eqs. (3) and (4):"
+
+# ╔═╡ 39109b35-19cb-42e6-a403-de487059a16c
+md"(e) For ``D > D_Z``, the residual stresses shall be corrected to ensure that continuity and equilibrium conditions are met.
+This shall be accomplished by calculating a correction factor ``F_b`` as follows:
+
+(1) Calculate ``σ_{rR}`` at ``D = D_Z`` using eq. (d)(4) above.
+
+(2) Calculate ``σ_{rRA}`` at ``D = D_Z`` using eq. KD-522.1(2).
+
+(3) Divide the results of subpara. (1) by the results ofsubparagraph (2) and this equals ``F_b``.
+
+(f) For DZ < D < DP, calculate the residual stresses using eqs. KD-522.1(1) and KD-522.1(2) and multiply the results at
+each value of D by Fb."
+
+# ╔═╡ 30725c9f-6589-4273-bedd-014aec535333
+md"# KD-502 Nomenclature"
+
+# ╔═╡ ee6101e9-8ace-434f-8d13-8322c96c8bc6
+md"""
+``A_{CS}`` = cross-sectional area normal to the longitudinal axis, ``in^2`` (``mm^2``)
+
+``D`` = diameter of the cylindrical vessel at any point in the wall, in. (mm)
+
+``D_I`` = inside diameter, in. (mm)
+
+``D_O`` = outside diameter, in. (mm)
+
+``D_P`` = diameter of the plastic-elastic interface before unloading the autofrettage pressure, in. (mm)
+
+``D_Z`` = diameter where ``\sigma_{tRA} = \sigma_{rRA}``, in. (mm)
+
+``E`` = elastic modulus, ksi (MPa)
+
+``F_b`` = correction factor for the Bauschinger effect for ``D_Z \leq D \leq D_P``
+
+``F_1`` = total longitudinal force on the cylinder at the maximum autofrettage pressure. If all of the force on the end closures is supported by an external device such as a frame, ``F_1 = 0`` kips (N)
+
+``M`` = wall overstrain ratio, ``(D_P - D_I)/(D_O - D_I)``
+<br>
+
+``P_A`` = maximum pressure applied during the autofrettage operation, ksi (MPa)
+<br>
+
+``S_y`` = actual measured yield strength of the material being autofrettaged at the temperature at which the autofrettage is performed, ksi (MPa)
+
+``Y`` = diameter ratio ``D_O/D_I``
+
+``\varepsilon_m`` = average value of the maximum tangential strain on the outside surface of the vessel, taken at a minimum of three axial locations and measured at the maximum pressure used for the autofrettage operation ``P_A``
+
+``\varepsilon_p`` = average value of the permanent tangential strain on the inside surface of the vessel, taken at a minimum of three axial locations and measured after the release of the autofrettage pressure
+
+``\sigma_{AD}`` = value of ``\sigma_{tRA}`` at ``D = D_I``, ksi (MPa)
+
+``\sigma_{CD}`` = value of the residual tangential stress at ``D = D_I`` corrected for the Bauschinger effect, ksi (MPa)
+<br>
+
+``\sigma_{rR}`` = residual radial stress corrected for the Bauschinger effect, ksi (MPa)
+
+``\sigma_{rRA}`` = first approximation of the residual radial stress after autofrettage for ``D_I \leq D \leq D_P``, ksi (MPa)
+
+``\sigma_{tR}`` = residual tangential stress corrected for the Bauschinger effect, ksi (MPa)
+
+``\sigma_{tRA}`` = first approximation of the residual tangential stress after autofrettage for ``D_I \leq D \leq D_P``, ksi (MPa)
+
+``\nu`` = Poisson's ratio
+"""
+
+# ╔═╡ a6e742f1-6869-4770-a299-8a2d16f404f4
+md"# Appendix"
+
+# ╔═╡ 776d7b87-68c3-4e27-8d42-8b5278119e3d
+"Removes the function argument list from the latex equation,
+so equations are shorter and better match the source text."
+function remove_arguments(s::LaTeXString)
+    r = r"\\left\(.*?\\right\)"
+    return LaTeXString(replace(s, r=>"", count=1))
+end
+
+# ╔═╡ c0a7fbac-efae-475f-b56b-7a5c7a94cecb
+remove_arguments(@latexrun M(D_I, D_O, D_P) = (D_P - D_I) / (D_O - D_I) )
+
+# ╔═╡ 9ce72e5f-ac24-4bcf-bfbe-78034b9de72f
+remove_arguments(@latexrun Y(D_I, D_O) = D_O / D_I )
+
+# ╔═╡ 5ed0af0f-369e-4296-a6ed-318cbaf04e0e
+remove_arguments(@latexrun P_A(D_I, D_O, D_P, S_y) = (
+		1.15 * S_y * (log(D_P / D_I) + (D_O ^ 2 - D_P ^ 2) / (2 * D_O ^ 2))
+	))
+
+# ╔═╡ 350e5cea-c4ca-4240-8aeb-4d5e158c4acd
+remove_arguments(@latexrun σ_tRA(D, D_I, D_0, D_P, S_y) = (
+	(D_P ^ 2 + D_O ^ 2) / (2 * D_O ^ 2) + log(D / D_P) -
+	(D_I ^ 2 / (D_0 ^ 2 - D_I ^ 2)) *
+	((D_O ^ 2 - D_P ^ 2) / (2 * D_O ^ 2) + log(D_P / D_I)) *
+	(1 + D_0 ^ 2 / D ^ 2)
+))
+
+# ╔═╡ 6ca2e2e1-1d9b-444b-b504-523111dc0255
+remove_arguments(@latexrun σ_rRA(D, D_I, D_0, D_P, S_y) = (
+	(D_P ^ 2 - D_O ^ 2) / (2 * D_O ^ 2) + log(D / D_P) -
+	(D_I ^ 2 / (D_0 ^ 2 - D_I ^ 2)) *
+	((D_O ^ 2 - D_P ^ 2) / (2 * D_O ^ 2) + log(D_P / D_I)) *
+	(1 - D_0 ^ 2 / D ^ 2)
+))
+
+# ╔═╡ 77e10b56-0f8a-43b5-a61c-73474cbfd034
+remove_arguments(@latexrun CDAD1(Y, M) = (
+	1.6695 - 0.1651 * Y - 1.8871 * M +1.9837 * M ^ 2 - 0.7296 * M ^ 3
+	))
+
+# ╔═╡ 085f9a24-db5b-4e63-8da4-76448bee491a
+remove_arguments(@latexrun function CDAD2(Y, M, open_end)
+	if open_end
+		return - 0.5484 + 1.8141 * Y - 0.6502 * Y ^ 2 + 0.0791 * Y ^ 3
+	else
+		return 1.15
+	end
+end)
+
+# ╔═╡ dd7aac98-d9eb-4625-be10-9c1e5f9798b8
+remove_arguments(@latexrun function σ_CD(CDAD1, CDAD2, σ_AD, S_y)
+	σ_CD = max(CDAD1, CDAD2) * σ_AD
+	if σ_CD < -0.7
+		return -0.7
+	else 
+		return σ_CD
+	end
+end)
+
+# ╔═╡ b93f95c5-3546-45f0-98e0-bce26070506b
+remove_arguments(@latexrun σtRσCD(D, D_Z, D_I, D_O) = (
+		(D_Z * (log(D / D_I) + 1) + D_I - 2 * D) / (D_Z - D_I)
+	))
+
+# ╔═╡ f06e390d-9b70-42b8-94b1-45857724475a
+remove_arguments(@latexrun σrRσCD(D, D_Z, D_I, D_O) = (
+		(D_Z * log(D / D_I) + D_I - D) / (D_Z - D_I)
+	))
+
+# ╔═╡ Cell order:
+# ╟─71449ab9-4daf-40b1-8972-15aa685adf43
+# ╟─7303e359-c56d-4bd2-ae90-47419ae762b2
+# ╟─65815c9c-07fc-4292-b049-1ab1296fc064
+# ╟─c0a7fbac-efae-475f-b56b-7a5c7a94cecb
+# ╟─456701b2-0951-4f97-8328-9d30b4b8ebd4
+# ╟─9ce72e5f-ac24-4bcf-bfbe-78034b9de72f
+# ╟─cce7a2a1-a86d-4739-9297-eed041f2c9f1
+# ╟─5ed0af0f-369e-4296-a6ed-318cbaf04e0e
+# ╟─11d75f19-1ed8-4531-9593-2bab83868526
+# ╟─350e5cea-c4ca-4240-8aeb-4d5e158c4acd
+# ╟─6ca2e2e1-1d9b-444b-b504-523111dc0255
+# ╟─9548a905-9619-42c8-a39f-55d170aaa0a8
+# ╟─77e10b56-0f8a-43b5-a61c-73474cbfd034
+# ╟─ce07593d-cd48-47f2-bafa-b5ebbad8ddb0
+# ╟─085f9a24-db5b-4e63-8da4-76448bee491a
+# ╟─6b55244e-48b1-4d93-89ac-f82cc79d7658
+# ╟─dd7aac98-d9eb-4625-be10-9c1e5f9798b8
+# ╟─30046613-10cd-4552-8c14-7e91c9f2e001
+# ╟─b93f95c5-3546-45f0-98e0-bce26070506b
+# ╟─f06e390d-9b70-42b8-94b1-45857724475a
+# ╟─39109b35-19cb-42e6-a403-de487059a16c
+# ╟─30725c9f-6589-4273-bedd-014aec535333
+# ╟─ee6101e9-8ace-434f-8d13-8322c96c8bc6
+# ╟─a6e742f1-6869-4770-a299-8a2d16f404f4
+# ╟─2e6b3627-77ab-4758-bf45-324d9adb8868
+# ╟─a268a8f0-a394-11ef-247d-2994c2d46cce
+# ╟─776d7b87-68c3-4e27-8d42-8b5278119e3d
