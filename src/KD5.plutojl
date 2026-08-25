@@ -41,11 +41,13 @@ md"### Wall Ratio"
 
 # ╔═╡ cce7a2a1-a86d-4739-9297-eed041f2c9f1
 md"### KD-521.3
-This shall only be used todetermine ``D_P`` ifthe value ofthe resulting overstrain ratio so determined is less than 0.4"
+This shall only be used todetermine ``D_P`` if the value of the resulting overstrain ratio so determined is less than 0.4"
 
 # ╔═╡ 11d75f19-1ed8-4531-9593-2bab83868526
 md"### KD-522.1
-When no reverse yielding occurs:"
+When no reverse yielding occurs:
+
+Residual stress for ``D_I < D < D_P``"
 
 # ╔═╡ 9548a905-9619-42c8-a39f-55d170aaa0a8
 md"### KD-522.2
@@ -79,6 +81,10 @@ This shall be accomplished by calculating a correction factor ``F_b`` as follows
 
 (f) For DZ < D < DP, calculate the residual stresses using eqs. KD-522.1(1) and KD-522.1(2) and multiply the results at
 each value of D by Fb."
+
+# ╔═╡ b5fbab34-822e-4810-a3a0-4a8ddf5487a6
+md"### KD-523
+Residual stresses between elastic-plastic interface and outside diameter (never yielded)"
 
 # ╔═╡ 30725c9f-6589-4273-bedd-014aec535333
 md"# KD-502 Nomenclature"
@@ -156,19 +162,19 @@ remove_arguments(@latexrun P_A(D_I, D_O, D_P, S_y) = (
 	))
 
 # ╔═╡ 350e5cea-c4ca-4240-8aeb-4d5e158c4acd
-remove_arguments(@latexrun σ_tRA(D, D_I, D_0, D_P, S_y) = (
+remove_arguments(@latexrun σ_tRA(D, D_I, D_O, D_P, S_y) = S_y * (
 	(D_P ^ 2 + D_O ^ 2) / (2 * D_O ^ 2) + log(D / D_P) -
-	(D_I ^ 2 / (D_0 ^ 2 - D_I ^ 2)) *
+	(D_I ^ 2 / (D_O ^ 2 - D_I ^ 2)) *
 	((D_O ^ 2 - D_P ^ 2) / (2 * D_O ^ 2) + log(D_P / D_I)) *
-	(1 + D_0 ^ 2 / D ^ 2)
+	(1 + D_O ^ 2 / D ^ 2)
 ))
 
 # ╔═╡ 6ca2e2e1-1d9b-444b-b504-523111dc0255
-remove_arguments(@latexrun σ_rRA(D, D_I, D_0, D_P, S_y) = (
+remove_arguments(@latexrun σ_rRA(D, D_I, D_O, D_P, S_y) = S_y * (
 	(D_P ^ 2 - D_O ^ 2) / (2 * D_O ^ 2) + log(D / D_P) -
-	(D_I ^ 2 / (D_0 ^ 2 - D_I ^ 2)) *
+	(D_I ^ 2 / (D_O ^ 2 - D_I ^ 2)) *
 	((D_O ^ 2 - D_P ^ 2) / (2 * D_O ^ 2) + log(D_P / D_I)) *
-	(1 - D_0 ^ 2 / D ^ 2)
+	(1 - D_O ^ 2 / D ^ 2)
 ))
 
 # ╔═╡ 77e10b56-0f8a-43b5-a61c-73474cbfd034
@@ -188,8 +194,8 @@ end)
 # ╔═╡ dd7aac98-d9eb-4625-be10-9c1e5f9798b8
 remove_arguments(@latexrun function σ_CD(CDAD1, CDAD2, σ_AD, S_y)
 	σ_CD = max(CDAD1, CDAD2) * σ_AD
-	if σ_CD < -0.7
-		return -0.7
+	if σ_CD / S_y < -0.7
+		return -0.7 * S_y
 	else 
 		return σ_CD
 	end
@@ -204,6 +210,36 @@ remove_arguments(@latexrun σtRσCD(D, D_Z, D_I, D_O) = (
 remove_arguments(@latexrun σrRσCD(D, D_Z, D_I, D_O) = (
 		(D_Z * log(D / D_I) + D_I - D) / (D_Z - D_I)
 	))
+
+# ╔═╡ b0112ca8-3495-44ba-9554-25b61dd338e9
+remove_arguments(@latexrun σ_tR(D, D_I, D_O, D_P, S_y, F_b) = S_y * F_b *(
+	(1 + D_O ^ 2 / D ^ 2) * 
+	(
+		D_P ^ 2 / (2 * D_O ^ 2) +
+		(D_I ^ 2 / (D_O ^ 2 - D_I ^ 2)) *
+		((D_P ^ 2 - D_O ^ 2) / (2 * D_O ^ 2) - log(D_P / D_I))
+	)	
+))
+
+# ╔═╡ cda69da8-ffc8-4113-a04c-d4b01bc5a073
+remove_arguments(@latexrun σ_rR(D, D_I, D_O, D_P, S_y, F_b) = S_y * F_b *(
+	(1 - D_O ^ 2 / D ^ 2) * 
+	(
+		D_P ^ 2 / (2 * D_O ^ 2) +
+		(D_I ^ 2 / (D_O ^ 2 - D_I ^ 2)) *
+		((D_P ^ 2 - D_O ^ 2) / (2 * D_O ^ 2) - log(D_P / D_I))
+	)	
+))
+
+# ╔═╡ 29b1b011-93ce-44ba-bb10-525a1f2b31ab
+html"""
+<style>
+main {
+    max-width: 900px;
+    padding-left: max(50px, 10%);
+}
+</style>
+"""
 
 # ╔═╡ Cell order:
 # ╟─71449ab9-4daf-40b1-8972-15aa685adf43
@@ -227,9 +263,13 @@ remove_arguments(@latexrun σrRσCD(D, D_Z, D_I, D_O) = (
 # ╟─b93f95c5-3546-45f0-98e0-bce26070506b
 # ╟─f06e390d-9b70-42b8-94b1-45857724475a
 # ╟─39109b35-19cb-42e6-a403-de487059a16c
+# ╟─b5fbab34-822e-4810-a3a0-4a8ddf5487a6
+# ╟─b0112ca8-3495-44ba-9554-25b61dd338e9
+# ╟─cda69da8-ffc8-4113-a04c-d4b01bc5a073
 # ╟─30725c9f-6589-4273-bedd-014aec535333
 # ╟─ee6101e9-8ace-434f-8d13-8322c96c8bc6
 # ╟─a6e742f1-6869-4770-a299-8a2d16f404f4
 # ╟─2e6b3627-77ab-4758-bf45-324d9adb8868
 # ╟─a268a8f0-a394-11ef-247d-2994c2d46cce
 # ╟─776d7b87-68c3-4e27-8d42-8b5278119e3d
+# ╠═29b1b011-93ce-44ba-bb10-525a1f2b31ab
