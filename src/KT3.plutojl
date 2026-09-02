@@ -55,9 +55,9 @@ md"""
 
 ``K_{ut}`` = hydrostatic test pressure upper limit factor (see KT-312)
 
-``S_u`` = tensile strength at design temperature from Section II, Part D, Subpart 1, Table U. If the tensile strength is not listed in Section II, Part D, Subpart 1, Table U, yield strength instead of tensile strength may be used.
+``S_u`` = specified tensile strength at test temperature
 
-``S_y`` = yield strength at design temperature from Section II, Part D, Subpart 1, Table Y-1
+``S_y`` = specified yield strength at test temperature
 """
 
 # ╔═╡ a6e742f1-6869-4770-a299-8a2d16f404f4
