@@ -202,12 +202,12 @@ remove_arguments(@latexrun function σ_CD(CDAD1, CDAD2, σ_AD, S_y)
 end)
 
 # ╔═╡ b93f95c5-3546-45f0-98e0-bce26070506b
-remove_arguments(@latexrun σtRσCD(D, D_Z, D_I, D_O) = (
+remove_arguments(@latexrun σtRσCD(D, D_Z, D_I) = (
 		(D_Z * (log(D / D_I) + 1) + D_I - 2 * D) / (D_Z - D_I)
 	))
 
 # ╔═╡ f06e390d-9b70-42b8-94b1-45857724475a
-remove_arguments(@latexrun σrRσCD(D, D_Z, D_I, D_O) = (
+remove_arguments(@latexrun σrRσCD(D, D_Z, D_I) = (
 		(D_Z * log(D / D_I) + D_I - D) / (D_Z - D_I)
 	))
 
