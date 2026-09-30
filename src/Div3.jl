@@ -11,23 +11,31 @@ or by opening their exported `*_notebook.html` file in your web browser.
 module Div3
 
 module KM6
-include("KM6.plutojl")
+    include("KM6.plutojl")
 end  # module KM6
 
+module KD1
+    include("KD1.plutojl")
+    export vonmises
+end  # module KD1
+
 module KD2
-include("KD2.plutojl")
+    include("KD2.plutojl")
 end  # module KD2
 
 module KD4
-include("KD4.plutojl")
+    include("KD4.plutojl")
 end  # module KD4
 
 module KD5
-include("KD5.plutojl")
+    include("KD5.plutojl")
 end  # module KD5
 
 module KT3
-include("KT3.plutojl")
+    include("KT3.plutojl")
 end  # module KT3
+
+import .KD1: vonmises
+export vonmises
 
 end  # module Div3
