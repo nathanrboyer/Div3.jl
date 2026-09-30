@@ -1,0 +1,71 @@
+### A Pluto.jl notebook ###
+# v1.0.3
+
+using Markdown
+using InteractiveUtils
+
+# ╔═╡ 2e6b3627-77ab-4758-bf45-324d9adb8868
+# ╠═╡ show_logs = false
+# ╠═╡ skip_as_script = true
+#=╠═╡
+begin
+	import Pkg
+	Pkg.activate(Base.current_project(@__DIR__))
+	Pkg.instantiate()
+	Text("Project environment is active.")
+end
+  ╠═╡ =#
+
+# ╔═╡ a268a8f0-a394-11ef-247d-2994c2d46cce
+begin
+	using Latexify, LaTeXStrings, PlutoUI
+	Text("Packages are loaded.")
+end
+
+# ╔═╡ 71449ab9-4daf-40b1-8972-15aa685adf43
+md"""
+### Verification
+These equations last verified to ASME BPVC **2025 Edition**.
+- *Verified compatible with 2025 Edition: Maxwell Frame -- 09/30/2026*
+"""
+
+# ╔═╡ 6a6da685-2cfd-46ec-841b-2c70f44f9e30
+md"### KD-131.1
+Distortion Energy Yield Stress Theory. In accordance with this theory, yielding at any point occurs when the equivalent stress reaches the yield strength of the material. The equivalent stress is the von Mises stress calculated from the three principal stresses at that point using the following equation: "
+
+# ╔═╡ 3fa176d7-3bd4-453e-9230-4f300c41c324
+@doc """
+    vonmises(σ₁, σ₂, σ₃) -> σₑ
+    vonmises(σₚ...) -> σₑ
+
+Computes equivalent von Mises stress from principal stresses.
+
+Argument order does not matter.
+If your principle stresses are contained in a vector or tuple,
+just splat it into the function argument with `...` .
+""" vonmises
+
+
+# ╔═╡ a6e742f1-6869-4770-a299-8a2d16f404f4
+md"# Appendix"
+
+# ╔═╡ 776d7b87-68c3-4e27-8d42-8b5278119e3d
+"Removes the function argument list from the latex equation,
+so equations are shorter and better match the source text."
+function remove_arguments(s::LaTeXString)
+    r = r"\\left\(.*?\\right\)"
+    return LaTeXString(replace(s, r=>"", count=1))
+end
+
+# ╔═╡ 581064e9-35b7-4507-9491-294fff12b313
+remove_arguments(@latexrun vonmises(σ₁, σ₂, σ₃) = 1 / sqrt(2) *((σ₁ - σ₂)^2 + (σ₂ - σ₃)^2 + (σ₃ - σ₁)^2) ^ 0.5)
+
+# ╔═╡ Cell order:
+# ╟─71449ab9-4daf-40b1-8972-15aa685adf43
+# ╟─6a6da685-2cfd-46ec-841b-2c70f44f9e30
+# ╟─581064e9-35b7-4507-9491-294fff12b313
+# ╟─a6e742f1-6869-4770-a299-8a2d16f404f4
+# ╟─2e6b3627-77ab-4758-bf45-324d9adb8868
+# ╟─a268a8f0-a394-11ef-247d-2994c2d46cce
+# ╟─776d7b87-68c3-4e27-8d42-8b5278119e3d
+# ╟─3fa176d7-3bd4-453e-9230-4f300c41c324
